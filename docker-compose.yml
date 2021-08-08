@@ -1,0 +1,12 @@
+version: "3"
+services:
+  postgres-bms:
+    image: postgres:12.1
+    container_name: postgres_bms
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=tokopedia-bms
+    tty: true
