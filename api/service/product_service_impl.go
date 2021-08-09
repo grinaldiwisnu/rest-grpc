@@ -15,7 +15,7 @@ type productServiceImpl struct {
 	ProductRepository repository.ProductRepository
 }
 
-func (service *productServiceImpl) Create(req model.CreateProductRequest) (res model.CreateProductResponse, err error) {
+func (service *productServiceImpl) Create(req model.CreateProductRequest) (*model.CreateProductResponse, error) {
 	product := entities.Product{
 		Id:       req.Id,
 		Name:     req.Name,
@@ -25,17 +25,17 @@ func (service *productServiceImpl) Create(req model.CreateProductRequest) (res m
 
 	result := service.ProductRepository.Insert(product)
 	if result == false {
-		return res, errors.New("failed to create product")
+		return nil, errors.New("failed to create product")
 	}
 
-	res = model.CreateProductResponse{
+	res := model.CreateProductResponse{
 		Id:       product.Id,
 		Name:     product.Name,
 		Price:    product.Price,
 		Quantity: product.Quantity,
 	}
 
-	return res, nil
+	return &res, nil
 }
 
 func (service *productServiceImpl) List() (res []model.GetProductResponse, err error) {
@@ -57,24 +57,24 @@ func (service *productServiceImpl) List() (res []model.GetProductResponse, err e
 	return res, nil
 }
 
-func (service *productServiceImpl) Get(req string) (res model.GetProductResponse, err error) {
+func (service *productServiceImpl) Get(req string) (*model.GetProductResponse, error) {
 	product := service.ProductRepository.Get(req)
 
 	if product.Id == "" {
-		return res, errors.New("product not found")
+		return nil, errors.New("product not found")
 	}
 
-	res = model.GetProductResponse{
+	res := model.GetProductResponse{
 		Id:       product.Id,
 		Name:     product.Name,
 		Price:    product.Price,
 		Quantity: product.Quantity,
 	}
 
-	return res, nil
+	return &res, nil
 }
 
-func (service *productServiceImpl) Delete(req string) (res string, err error) {
+func (service *productServiceImpl) Delete(req string) (string, error) {
 	p := entities.Product{Id: req}
 	product := service.ProductRepository.Delete(p)
 
